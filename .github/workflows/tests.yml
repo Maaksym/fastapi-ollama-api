@@ -8,6 +8,29 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:16
+
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: fastapi_ai_test
+
+        ports:
+          - 5432:5432
+
+        options: >-
+          --health-cmd "pg_isready -U postgres -d fastapi_ai_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/fastapi_ai_test
+      OLLAMA_URL: http://localhost:11434/api/generate
+      OLLAMA_MODEL: qwen2.5:3b
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -21,6 +44,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Run migrations
+        run: alembic upgrade head
 
       - name: Run tests
         run: python -m pytest
