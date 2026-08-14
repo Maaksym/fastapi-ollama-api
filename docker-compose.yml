@@ -58,5 +58,29 @@ services:
       db:
         condition: service_healthy
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: fastapi_ai_prometheus
+
+    ports:
+      - "9090:9090"
+
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+    depends_on:
+      - app
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: fastapi_ai_grafana
+
+    ports:
+      - "3000:3000"
+
+    depends_on:
+      - prometheus
+
+
 volumes:
   postgres_data:
