@@ -31,3 +31,24 @@ class AIRequest(Base):
         default=datetime.utcnow,
         nullable=False,
     )
+
+# Модель для зберігання нотаток,
+# які AI-агент може створювати через tool.
+class Note(Base):
+    __tablename__ = "notes"
+
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+    )
+
+    text: Mapped[str] = mapped_column(
+        String(1000),
+        nullable=False,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+        nullable=False,
+    )

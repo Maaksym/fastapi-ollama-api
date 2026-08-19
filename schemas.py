@@ -23,3 +23,12 @@ class AIRequestResponse(BaseModel):
     model_config = {
         "from_attributes": True
     }
+
+#що приходить від користувача
+class AgentRequest(BaseModel):
+    message: str = Field(min_length=1, max_length=1000)
+
+#що агент повертає назад
+class AgentResponse(BaseModel):
+    message: str
+    answer: str
