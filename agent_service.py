@@ -52,6 +52,21 @@ async def choose_tool(message: str) -> str:
     ):
         return "GET_WEATHER"
 
+    # Якщо користувач прямо просить показати збережені нотатки,
+    # одразу вибираємо GET_NOTES.
+    # Фрази, які явно означають читання нотаток
+    notes_phrases = (
+        "покажи мої нотатки",
+        "покажи нотатки",
+        "мої нотатки",
+    )
+
+    if any(
+            phrase in text
+            for phrase in notes_phrases
+    ):
+        return "GET_NOTES"
+
     # Для менш очевидних випадків
     # уже просимо LLM вибрати tool
     prompt = f"""

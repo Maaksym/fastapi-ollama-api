@@ -15,11 +15,21 @@ def test_health_check():
 
 def test_generate_text(monkeypatch):
     async def fake_generate_ai_answer(prompt: str) -> str:
+        # Підміняємо реальний Ollama
         return "Тестова відповідь"
+
+    async def fake_save_ai_request(db, prompt: str, answer: str):
+        # Підміняємо реальний запис у PostgreSQL
+        return None
 
     monkeypatch.setattr(
         "routers.ai.generate_ai_answer",
         fake_generate_ai_answer,
+    )
+
+    monkeypatch.setattr(
+        "routers.ai.save_ai_request",
+        fake_save_ai_request,
     )
 
     response = client.post(
