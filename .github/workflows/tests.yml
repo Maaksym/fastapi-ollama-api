@@ -28,6 +28,7 @@ jobs:
 
     env:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/fastapi_ai_test
+      TEST_DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/fastapi_ai_test
       OLLAMA_URL: http://localhost:11434/api/generate
       OLLAMA_MODEL: qwen2.5:3b
 
@@ -47,9 +48,10 @@ jobs:
 
       - name: Run migrations
         run: alembic upgrade head
-
+# Запускаємо всі тести, крім E2E.
+# E2E потребує реального Ollama, якого немає в GitHub Actions.
       - name: Run tests
-        run: python -m pytest
+        run: python -m pytest --ignore=tests/test_agent_e2e.py
 
 
   build-and-push:

@@ -10,10 +10,14 @@ from repositories import save_ai_request, get_ai_requests
 
 # Окрема тестова база даних.
 # Важливо: не використовуємо основну fastapi_ai.
-TEST_DATABASE_URL = (
-    "postgresql+asyncpg://postgres:postgres@localhost:5433/fastapi_ai_test"
-)
+import os
 
+# Локально використовуємо порт 5433.
+# У GitHub Actions TEST_DATABASE_URL буде переданий через environment.
+TEST_DATABASE_URL = os.getenv(
+    "TEST_DATABASE_URL",
+    "postgresql+asyncpg://postgres:postgres@localhost:5433/fastapi_ai_test",
+)
 
 @pytest.mark.asyncio
 async def test_save_and_get_ai_request():
